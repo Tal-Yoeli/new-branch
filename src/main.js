@@ -1,10 +1,11 @@
 // VARIABLE DECLARATION
-
+let counter = 0;
 let itemArray = [];
 const prioritySelector = document.querySelector("#prioritySelector");
 const textInput = document.querySelector("#textInput");
 const viewSection = document.querySelector("#view-section");
 const taskNum = document.querySelector("#tasks-number");
+const list = document.querySelector("#item-list");
 
 // FUNCTION
 
@@ -17,6 +18,7 @@ function addTask(e) {
     let priorityOfItem = prioritySelector.value;
     // CREATE A NEW DIV WITH ALL THE ELEMENTS AND CLASSES
 
+    let bullet = document.createElement("li");
     let containerDiv = document.createElement("div");
     let taskText = document.createElement("div");
     let createdAt = document.createElement("div");
@@ -34,15 +36,16 @@ function addTask(e) {
     priority.innerText = priorityOfItem;
     createdAt.innerText = date;
     taskText.innerText = newTask;
-    containerDiv.appendChild(taskText);
-    containerDiv.appendChild(createdAt);
     containerDiv.appendChild(priority);
-
-    viewSection.appendChild(containerDiv);
+    containerDiv.appendChild(createdAt);
+    containerDiv.appendChild(taskText);
 
     itemArray.push(containerDiv);
 
-    taskNum.innerText = `${itemArray.length} TODOs`;
+    bullet.appendChild(containerDiv);
+    list.appendChild(bullet);
+
+    taskNum.innerText = `${itemArray.length}`;
 
     //priorityCheck(prioritySelector.value);
   } else {
@@ -50,15 +53,14 @@ function addTask(e) {
   }
   textInput.value = "";
 }
-// SORT
+// SORT BY ID
 
 function sort(itemArray) {
   for (let i = itemArray.length - 1; i >= 0; i--) {
-    //console.log(itemArray[i]);
     for (let j = 0; j < i; j++) {
       if (
-        parseInt(itemArray[j].lastChild.id) >
-        parseInt(itemArray[j + 1].lastChild.id)
+        parseInt(itemArray[j].firstChild.id) > // FIRST CHILD - PRIORITY
+        parseInt(itemArray[j + 1].firstChild.id)
       ) {
         let temp = itemArray[j];
         itemArray[j] = itemArray[j + 1];
@@ -73,9 +75,11 @@ function sort(itemArray) {
 
 function displayByNumber(e) {
   itemArray = sort(itemArray);
-  viewSection.innerHTML = "Your Tasks";
+  list.innerText = "";
   for (let i = 0; i < itemArray.length; i++) {
-    viewSection.appendChild(itemArray[i]);
+    let bullet = document.createElement("li");
+    bullet.appendChild(itemArray[i]);
+    list.appendChild(bullet);
   }
 }
 
