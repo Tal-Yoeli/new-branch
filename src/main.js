@@ -18,18 +18,15 @@ counterElem.innerText = counter;
 //ADD TASK
 function addTask(e) {
   if (itemArray.length < 5 && textInput.value !== "") {
-    // games.classList.add("color-pick");
-    // color.classList.add("color-div");
     if (priorityCheck(prioritySelector.value)) {
       let sql = new Date();
       let date = dateLikeWeNeed(sql);
       let newTask = textInput.value;
       let priorityOfItem = prioritySelector.value;
-      console.log(priorityOfItem);
       // CREATE A NEW DIVES
 
       let todoContainer = document.createElement("div");
-      //todoContainer.id = priorityOfItem + "-div";
+      todoContainer.id = priorityOfItem + "-div";
       todoContainer.classList.add("todoContainer");
       todoContainer.innerHTML = `<div class="todoPriority" id="${priorityOfItem}">
           ${priorityOfItem}
@@ -48,9 +45,16 @@ function addTask(e) {
       deleteButton.innerText = "X";
       deleteButton.addEventListener("click", deleteTask);
 
-      //APPEND TO CONTAINER
+      // CREATING COLOR BUTTON
 
+      let colorButton = document.createElement("button");
+      colorButton.classList.add("color-button");
+      colorButton.innerText = "Color";
+      colorButton.addEventListener("click", addColor);
+
+      //APPEND TO CONTAINER
       todoContainer.appendChild(deleteButton);
+      todoContainer.appendChild(colorButton);
 
       // ADD PRIORITY
       itemArray.push(todoContainer);
@@ -174,21 +178,20 @@ function returningToLastPoint(num, options) {
 
   newOption.value = num;
   newOption.innerHTML = `${num}`;
+
+  //ADD NEW ELEM TO ARRAY
   options = Array.from(options);
   options.push(newOption);
-  //   options.forEach((element) => {
-  //     console.log(element);
-  //   });
+
+  //SORT ARRAY BY SIZE
   option = options.sort((a, b) => {
-    console.log(a.textContent);
     return parseInt(a.textContent) - parseInt(b.textContent);
   });
-  options.forEach((element) => {
-    console.log(element);
-  });
 
+  //GET READ OF BIGGEST
   options.pop();
 
+  //ADD TO DOM
   prioritySelector.innerHTML = "";
   for (let i = 0; i < options.length; i++) {
     prioritySelector.appendChild(options[i]);
@@ -214,7 +217,7 @@ function deleteTask(e) {
 
   //REMOVE TASK FROM DOC
 
-  //PRIORUTY
+  // PRIORiTY
   let parent = e.target.parentElement;
   e.target.parentElement.remove();
   let options = document.querySelectorAll("option");
@@ -224,16 +227,32 @@ function deleteTask(e) {
 // MISSION COLOR
 
 function missionColor(e) {
-  let red = e.offsetY;
+  let yellow = e.offsetY;
   let blue = e.offsetX;
-  color.style.backgroundColor = `rgb(${red},${blue},40)`;
+  color.style.backgroundColor = `rgb(40,${blue},${yellow})`;
 }
 
 // PICK COLOR
 
 function pickColor(e) {
   e.target.style.backgroundColor = `rgb(${e.offsetX},${e.offsetX},40)`;
-  //div.style.backgroundColor = e.target.style.backgroundColor;
+}
+
+function addColor(e) {
+  games.classList.add("color-pick");
+  color.classList.add("color-div");
+  color.innerHTML = "Pick A Color";
+  let div = e.target.parentElement;
+  color.addEventListener("mousemove", missionColor);
+  color.addEventListener("click", (e) => {
+    if (div) {
+      div.style.backgroundColor = `rgb(40,${e.offsetX},${e.offsetY})`;
+      games.classList.remove("color-pick");
+      color.classList.remove("color-div");
+    }
+    div = "";
+  });
+  color.innerHTML = "";
 }
 
 //EVENTS LISTENERS

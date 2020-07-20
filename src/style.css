@@ -47,13 +47,6 @@ section {
   display: inline-block;
   margin: 10px;
 }
-.delete {
-  position: relative;
-  float: right;
-  background-color: black;
-  cursor: pointer;
-  color: white;
-}
 
 footer {
   position: relative;
@@ -82,4 +75,18 @@ footer {
   width: 200px;
   height: 200px;
   background-color: white;
+}
+
+.color-button {
+  position: relative;
+  float: right;
+  cursor: pointer;
+}
+
+.delete {
+  position: relative;
+  float: right;
+  background-color: black;
+  cursor: pointer;
+  color: white;
 }
