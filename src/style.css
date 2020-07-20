@@ -1,0 +1,34 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #f6d365;
+  color: black;
+  font-family: Poppins, sans-serif;
+  text-align: center;
+  position: relative;
+}
+
+header {
+  font-size: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid black;
+}
+section {
+  position: relative;
+  min-height: 20vh;
+  display: block;
+  text-align: center;
+  margin: auto;
+  margin-top: 10vh;
+  width: 50%;
+  border: 2px solid black;
+}
+.QA {
+  margin: 10px 0;
+}
+#priority-text {
+  margin: 10px 10px;
+}

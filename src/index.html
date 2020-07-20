@@ -4,27 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap"
+      rel="stylesheet"
+    />
+
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
 
   <body>
     <header id="heading"><h2>To Do List</h2></header>
-    <div class="controlSection">
-      <div id="sort-div">
-        <div id="tasks-number">0 TODOs</div>
-        <button id="sort-button">Sort</button>
+    <section class="controlSection">
+      <div id="sort-div" class="QA">
+        <counter id="counter"></counter> <span> To Do </span>
+        <button id="sortButton">Sort</button>
       </div>
-      <input type="text" name="" id="textInput" placeholder="Enter Mission" />
-      <select name="priority" id="prioritySelector">
-        <option value="1" id="one">1</option>
-        <option value="2" id="two">2</option>
-        <option value="3" id="three">3</option>
-        <option value="4" id="four">4</option>
-        <option value="5" id="five">5</option>
-      </select>
-      <button id="addButton">Add Mission</button>
-    </div>
-    <div id="view-section">Your Tasks</div>
+      <br />
+      <div id="search" class="QA">
+        Search For A Mission
+        <input type="text" id="filter" />
+      </div>
+      <br />
+      <div id="task-enter" class="QA">
+        <input type="text" name="" id="textInput" placeholder="Enter Mission" />
+        <span id="priority-text"> What Priority?</span>
+        <select name="priority" id="prioritySelector">
+          <option value="1" id="one">1</option>
+          <option value="2" id="two">2</option>
+          <option value="3" id="three">3</option>
+          <option value="4" id="four">4</option>
+          <option value="5" id="five">5</option>
+        </select>
+        <button id="addButton">Add Task</button>
+      </div>
+    </section>
+    <section id="view-section">
+      <span> Your Tasks</span>
+    </section>
+    <div id="games"></div>
     <script src="./main.js"></script>
   </body>
 </html>
