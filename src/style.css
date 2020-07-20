@@ -1,10 +1,9 @@
 * {
   margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 body {
-  background-color: #f6d365;
+  background-image: linear-gradient(120deg, #f6d365, rgb(56, 47, 27));
   color: black;
   font-family: Poppins, sans-serif;
   text-align: center;
@@ -22,8 +21,9 @@ section {
   display: block;
   text-align: center;
   margin: auto;
-  margin-top: 10vh;
-  width: 50%;
+  margin-top: 7vh;
+  margin-bottom: 7vh;
+  width: 80%;
   border: 2px solid black;
 }
 .QA {
@@ -31,4 +31,55 @@ section {
 }
 #priority-text {
   margin: 10px 10px;
+}
+#task-head {
+  border-bottom: 2px solid black;
+}
+.todoContainer {
+  position: relative;
+  text-align: left;
+  width: 100%;
+  border-bottom: 1px solid black;
+}
+.todoPriority,
+.todoCreatedAt,
+.todoText {
+  display: inline-block;
+  margin: 10px;
+}
+.delete {
+  position: relative;
+  float: right;
+  background-color: black;
+  cursor: pointer;
+  color: white;
+}
+
+footer {
+  position: relative;
+  margin-bottom: 0;
+  background-image: linear-gradient(120deg, rgb(56, 47, 27), #f6d365);
+  border-top: 2px solid black;
+  height: 5em;
+  width: 100%;
+  text-align: left;
+  color: white;
+}
+
+.color-pick {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.color-div {
+  width: 200px;
+  height: 200px;
+  background-color: white;
 }
