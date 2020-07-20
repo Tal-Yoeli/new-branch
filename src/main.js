@@ -1,59 +1,57 @@
 // VARIABLE DECLARATION
+
 let counter = 0;
 let itemArray = [];
+
 const prioritySelector = document.querySelector("#prioritySelector");
 const textInput = document.querySelector("#textInput");
 const viewSection = document.querySelector("#view-section");
-const taskNum = document.querySelector("#tasks-number");
-const list = document.querySelector("#item-list");
+const searchBox = document.querySelector("#filter");
+const counterElem = document.querySelector("#counter");
+const games = document.querySelector("#games");
+
+counterElem.innerText = counter;
 
 // FUNCTION
 
 //ADD TASK
 function addTask(e) {
-  if (itemArray.length < 5) {
-    let sql = new Date();
-    let date = dateLikeWeNeed(sql);
-    let newTask = textInput.value;
-    let priorityOfItem = prioritySelector.value;
-    // CREATE A NEW DIV WITH ALL THE ELEMENTS AND CLASSES
+  if (itemArray.length < 5 && textInput.value !== "") {
+    console.log(typeof prioritySelector.value);
+    if (priorityCheck(prioritySelector.value)) {
+      let sql = new Date();
+      let date = dateLikeWeNeed(sql);
+      let newTask = textInput.value;
+      let priorityOfItem = prioritySelector.value;
+      // CREATE A NEW DIVES
 
-    let bullet = document.createElement("li");
-    let containerDiv = document.createElement("div");
-    let taskText = document.createElement("div");
-    let createdAt = document.createElement("div");
-    let priority = document.createElement("div");
+      let todoContainer = document.createElement("div");
+      todoContainer.classList.add("todoContainer");
+      todoContainer.innerHTML = `<div class="todoPriority" id="${priorityOfItem}">
+              ${priorityOfItem}
+              </div>
+              <div class="todoCreatedAt">
+                ${date}
+                </div>
+            <div class="todoText">
+              ${newTask}
+              </div>`;
 
-    containerDiv.className = "todoContainer";
-    taskText.className = "todoText";
-    createdAt.className = "todoCreatedAt";
-    priority.className = "priority";
-    priority.id = prioritySelector.value;
-    //console.log(priority);
+      //    let checkbox = document.createElement("input");
+      itemArray.push(todoContainer);
+      viewSection.appendChild(todoContainer);
 
-    //APPEND
+      counter++;
 
-    priority.innerText = priorityOfItem;
-    createdAt.innerText = date;
-    taskText.innerText = newTask;
-    containerDiv.appendChild(priority);
-    containerDiv.appendChild(createdAt);
-    containerDiv.appendChild(taskText);
-
-    itemArray.push(containerDiv);
-
-    bullet.appendChild(containerDiv);
-    list.appendChild(bullet);
-
-    taskNum.innerText = `${itemArray.length}`;
-
-    //priorityCheck(prioritySelector.value);
-  } else {
+      counterElem.innerText = counter;
+    } else {
+      alert("You already have a task with that priority");
+    }
+  } else if (taskNum.textContent === "5") {
     alert("You Need To come Down, To much Tasks");
   }
   textInput.value = "";
 }
-// SORT BY ID
 
 function sort(itemArray) {
   for (let i = itemArray.length - 1; i >= 0; i--) {
@@ -68,35 +66,66 @@ function sort(itemArray) {
       }
     }
   }
-  return itemArray;
+  return itemArray.reverse();
 }
 
 // CHANGE DISPLAY
 
 function displayByNumber(e) {
   itemArray = sort(itemArray);
-  list.innerText = "";
+  viewSection.innerText = "Your Tasks";
   for (let i = 0; i < itemArray.length; i++) {
-    let bullet = document.createElement("li");
-    bullet.appendChild(itemArray[i]);
-    list.appendChild(bullet);
+    viewSection.appendChild(itemArray[i]);
+  }
+}
+
+// SEARCH
+
+function filterItems(e) {
+  // convert text to lowercase
+  let text = e.target.value.toLowerCase();
+  // Get lis
+  let items = document.getElementsByClassName("todoText");
+
+  // Convert to an array
+  let arr = Array.from(items);
+  for (let i = 0; i < arr.length; i++) {
+    let itemName = arr[i].textContent;
+    if (itemName.toLowerCase().indexOf(text) !== -1) {
+      arr[i].parentElement.style.display = "block";
+    } else {
+      arr[i].parentElement.style.display = "none";
+    }
   }
 }
 
 //"HELP" FUNCTION (REMEMBER PRIORITY SELECTOR)
 
 function priorityCheck(value) {
-  document.getElementById(`${value}`).style.display = "none";
+  for (let i = 0; i < itemArray.length; i++) {
+    if (value === itemArray[i].firstChild.id) {
+      return false;
+    }
+  }
+  return true;
 }
 
 function dateLikeWeNeed(sql) {
   let date = `${sql.getFullYear()}-${sql.getMonth()}-${sql.getDate()} ${sql.getHours()}:${sql.getMinutes()}:${sql.getSeconds()}`;
   return date;
 }
+function replace(arr, obj) {
+  let num = parseInt(prioritySelector.value);
+  let sorted = sort(arr);
+  sorted.splice(num - 1, obj);
+
+  return sorted;
+}
 
 //EVENTS LISTENERS
 
 document.querySelector("#addButton").addEventListener("click", addTask);
 document
-  .querySelector("#sort-button")
+  .querySelector("#sortButton")
   .addEventListener("click", displayByNumber);
+searchBox.addEventListener("keyup", filterItems);
