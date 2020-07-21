@@ -2,6 +2,7 @@
 
 let counter = 0;
 let itemArray = [];
+let doneCounter = 0;
 
 const prioritySelector = document.querySelector("#prioritySelector");
 const textInput = document.querySelector("#textInput");
@@ -10,6 +11,7 @@ const searchBox = document.querySelector("#filter");
 const counterElem = document.querySelector("#counter");
 const games = document.querySelector("#games");
 const color = document.querySelector("#color");
+const doneSpan = document.querySelector("#done");
 
 counterElem.innerText = counter;
 
@@ -17,7 +19,7 @@ counterElem.innerText = counter;
 
 //ADD TASK
 function addTask(e) {
-  if (itemArray.length < 5 && textInput.value !== "") {
+  if (textInput.value !== "") {
     if (priorityCheck(prioritySelector.value)) {
       let sql = new Date();
       let date = dateLikeWeNeed(sql);
@@ -52,7 +54,16 @@ function addTask(e) {
       colorButton.innerText = "Color";
       colorButton.addEventListener("click", addColor);
 
+      // CREATING DON BUTTON
+
+      let done = document.createElement("button");
+      done.classList.add("done");
+      done.innerText = "V";
+      done.addEventListener("click", taskDone);
+
       //APPEND TO CONTAINER
+
+      todoContainer.appendChild(done);
       todoContainer.appendChild(deleteButton);
       todoContainer.appendChild(colorButton);
 
@@ -62,6 +73,12 @@ function addTask(e) {
       viewSection.appendChild(todoContainer);
 
       // ADDING TO COUNTER
+
+      // ADDING TO LOCAL STORAGE
+      let id = prioritySelector.value;
+      localStorage.setItem(`priority ${id}`, id);
+      localStorage.setItem(`date ${id}`, date);
+      localStorage.setItem(`task ${id}`, newTask);
 
       counter++;
       counterElem.innerText = counter;
@@ -73,20 +90,16 @@ function addTask(e) {
       // CLEANNIG PRIORITY
 
       arrange(priorityOfItem);
-    } else {
-      alert("You already have a task with that priority");
-    }
-  } else if (counterElem.textContent === "5") {
-    alert("You Need To come Down, To much Tasks");
+    } else alert("You already have a task with that priority");
   }
 }
 
 function sortElem(itemArray) {
   itemArray.sort((a, b) => {
-    return parseInt(a.firstChild.id) - parseInt(b.firstChild.id);
+    return parseInt(b.firstChild.id) - parseInt(a.firstChild.id);
   });
 
-  return itemArray.reverse();
+  return itemArray;
 }
 
 // CHANGE DISPLAY
@@ -104,7 +117,7 @@ function displayByNumber(e) {
 function filterItems(e) {
   // convert text to lowercase
   let text = e.target.value.toLowerCase();
-  // Get lis
+  // Get all the items
   let items = document.getElementsByClassName("todoText");
 
   // Convert to an array
@@ -137,7 +150,7 @@ function arrange(pri) {
   let options = document.querySelectorAll("option");
   options = Array.from(options);
 
-  // DILL WITH EDGE CASES - IF WE PICK THE GREATEST ONE
+  // DILL WITH EDGE CASES - IF WE PICK THE BIGGEST ONE
   let theLast = options[options.length - 1];
 
   let isLast = theLast.value === pri;
@@ -208,8 +221,10 @@ function dateLikeWeNeed(sql) {
 // DELETE TASK FUNC
 
 function deleteTask(e) {
-  counter--;
-  counterElem.innerText = counter;
+  if (counter > 0 && !e.target.parentElement.classList.contains("task-done")) {
+    counter--;
+    counterElem.innerText = counter;
+  }
 
   // REMOVE FROM ARRAY
 
@@ -217,7 +232,7 @@ function deleteTask(e) {
 
   //REMOVE TASK FROM DOC
 
-  // PRIORiTY
+  // ADD PRIORITY BACK TO OPTIONS
   let parent = e.target.parentElement;
   e.target.parentElement.remove();
   let options = document.querySelectorAll("option");
@@ -241,7 +256,7 @@ function pickColor(e) {
 function addColor(e) {
   games.classList.add("color-pick");
   color.classList.add("color-div");
-  color.innerHTML = "Pick A Color";
+  color.innerText = "Pick A Color";
   let div = e.target.parentElement;
   color.addEventListener("mousemove", missionColor);
   color.addEventListener("click", (e) => {
@@ -249,10 +264,22 @@ function addColor(e) {
       div.style.backgroundColor = `rgb(40,${e.offsetX},${e.offsetY})`;
       games.classList.remove("color-pick");
       color.classList.remove("color-div");
+      color.innerHTML = "";
     }
     div = "";
   });
-  color.innerHTML = "";
+}
+
+// MISSION DONE
+
+function taskDone(e) {
+  e.target.parentElement.classList.add("task-done");
+  e.target.parentElement.children[2].innerText += " (DONE!)";
+  //e.target.parentElement.children[2].style.fontSize = "15px";
+  e.target.style.display = "none";
+  e.target.parentElement.children[5].style.display = "none";
+  counter--;
+  counterElem.innerHTML = counter;
 }
 
 //EVENTS LISTENERS
@@ -266,27 +293,29 @@ searchBox.addEventListener("keyup", filterItems);
 color.addEventListener("mousemove", missionColor);
 color.addEventListener("click", pickColor);
 
-//   for (let i = itemArray.length - 1; i >= 0; i--) {
-//     for (let j = 0; j < i; j++) {
-//       if (
-//         parseInt(itemArray[j].firstChild.id) > // FIRST CHILD - PRIORITY
-//         parseInt(itemArray[j + 1].firstChild.id)
-//       ) {
-//         let temp = itemArray[j];
-//         itemArray[j] = itemArray[j + 1];
-//         itemArray[j + 1] = temp;
+// LOCAL STORAGE
+
+// function addFromLocalStorage() {
+//   let divToLocalStorage = document.createElement("div");
+//   divToLocalStorage.classList.add("todoContainer");
+//   for (let i = 0; i < localStorage.length; i++) {
+//     const key = localStorage.key(i);
+//     const value = localStorage.getItem(key);
+//     let divToAdd = document.createElement("div");
+//     for (let j = 0; j < 11; j++) {
+//       if (key == "Apriority " + `${j}`) {
+//         divToAdd.classList.add("todoPriority");
+//         console.log(divToAdd.classList);
+//       }
+//       if (key == "Adate " + `${j}`) {
+//         divToAdd.classList.add("todoCreatedAt");
+//       }
+//       if (key == "task " + `${j}`) {
+//         divToAdd.classList.add("todoText");
 //       }
 //     }
+//     divToAdd.innerText = value;
+//     divToLocalStorage.appendChild(divToAdd);
 //   }
-
-//COLOR PICKING
-
-//   color.addEventListener("enter", pickColor);
-//   todoContainer.style.backgroundColor = color.style.backgroundColor;
-// APPEND TO DOM
-//   color.addEventListener("click", () => {
-//     let currentDiv = document.getElementById(priorityOfItem + "-div");
-//     currentDiv.style.backgroundColor = color.style.backgroundColor;
-//     color.classList.remove("color-div");
-//     games.classList.remove("color-pick");
-//   });
+//   viewSection.appendChild(divToLocalStorage);
+// }
