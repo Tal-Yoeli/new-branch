@@ -115,6 +115,4 @@ $ npm run test
 
 GOOD LUCK!
 
-## Test Finish
-
-[add-todoTask](C:\Users\talyo\OneDrive\Documents\GitHub\pre-course-final\ui-testing-recording.gif)
+##fghfdghdfghfdhgfhfg
